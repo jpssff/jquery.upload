@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>分片上传Demo</title>
+    </head>
+    <body>
+        <input id="file" name="test" type="file">
+        <button id="upload">Upload!</button>
+        <div id="info"></div>
+    </body>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script src="jquery.upload.js"></script>
+    <script>
+    $('#upload').click(function(){
+        var log = function(msg){
+            $('#info').text(msg);
+        };
+        $.upload($('#file'), {
+            url: 'upload.php',
+            before: function(file) {
+                return true;
+            },
+            progress: function(index, total, res){
+                log('pieces:' + (index + 1) + '/' + total + 'done.');
+            },
+            checkProgress: function(res){
+                return res.status == 0;
+            }
+        })
+        .done(function(){
+            log('done');
+        })
+        .fail(function(e){
+            log('error:' + JSON.stringify(e));
+        });
+    });
+    </script>
+</html>
